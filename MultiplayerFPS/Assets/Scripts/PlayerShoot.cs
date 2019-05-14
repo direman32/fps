@@ -49,6 +49,6 @@ public class PlayerShoot : NetworkBehaviour
         Debug.Log(_playerID + " has been shot");
         Player _player = GameManager.getPlayer(_playerID);
 
-        _player.TakeDamage(damage);
+        _player.RpcTakeDamage(damage);
     }
 }

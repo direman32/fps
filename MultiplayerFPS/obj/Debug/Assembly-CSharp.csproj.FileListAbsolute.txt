@@ -1,0 +1,2 @@
+C:\Users\Cathal\Documents\GitHub\fps\MultiplayerFPS\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+C:\Users\Cathal\Documents\GitHub\fps\MultiplayerFPS\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache

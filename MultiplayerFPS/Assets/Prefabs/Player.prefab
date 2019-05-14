@@ -118,12 +118,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapon:
     name: UZI
-    damage: 10
+    damage: 40
     range: 100
   cam: {fileID: 2047062}
   mask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 567
 --- !u!114 &5755329109663426760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,6 +136,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8636a38212c9234da4d1eb0228d13ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
+  disableOnDeath:
+  - {fileID: 11433214}
+  - {fileID: 3118553579406743118}
 --- !u!114 &11483786
 MonoBehaviour:
   m_ObjectHideFlags: 0
