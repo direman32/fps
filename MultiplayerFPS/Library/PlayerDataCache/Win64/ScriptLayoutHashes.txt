@@ -1,6 +1,6 @@
 Win64
 PlayerPath?
-C:/Users/Cathal/Documents/Unity/MultiplayerFPS/Builds/MultiplayerFPS.exe
+C:/Users/Cathal/Documents/GitHub/fps/MultiplayerFPS/Builds/MultiplayerFPS.exe
 SceneListBegin?
 Assets/Scenes/MainLevel01.unity
 SceneListEnd?
