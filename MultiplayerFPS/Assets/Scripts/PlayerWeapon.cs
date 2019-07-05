@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [System.Serializable]
-public class PlayerWeapon
-{
-    public string name = "UZI";
+public class PlayerWeapon {
 
-    public int damage = 10;
-    public float range = 100f;
+	public string name = "Glock";
+
+	public int damage = 10;
+	public float range = 100f;
+
 }

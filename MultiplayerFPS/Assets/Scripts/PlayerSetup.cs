@@ -1,6 +1,10 @@
+//-------------------------------------
+// Responsible for setting up the player.
+// This includes adding/removing him correctly on the network.
+//-------------------------------------
+
 using UnityEngine;
 using UnityEngine.Networking;
-
 
 [RequireComponent(typeof(Player))]
 public class PlayerSetup : NetworkBehaviour {
@@ -8,10 +12,10 @@ public class PlayerSetup : NetworkBehaviour {
 	[SerializeField]
 	Behaviour[] componentsToDisable;
 
-    [SerializeField]
-    string remoteLayerName = "RemotePlayer";
+	[SerializeField]
+	string remoteLayerName = "RemotePlayer";
 
-    Camera sceneCamera;
+	Camera sceneCamera;
 
 	void Start ()
 	{
@@ -19,8 +23,8 @@ public class PlayerSetup : NetworkBehaviour {
 		// active on the player that we control
 		if (!isLocalPlayer)
 		{
-            DisableComponents();
-            AssignRemoteLayer();
+			DisableComponents();
+			AssignRemoteLayer();
 		}
 		else
 		{
@@ -32,7 +36,7 @@ public class PlayerSetup : NetworkBehaviour {
             }
 		}
 
-        GetComponent<Player>().Setup();
+		GetComponent<Player>().Setup();
 	}
 
     public override void OnStartClient()
@@ -45,18 +49,18 @@ public class PlayerSetup : NetworkBehaviour {
         GameManager.RegisterPlayer(_netID, _player);
     }
 
-    void AssignRemoteLayer()
-    {
-        gameObject.layer = LayerMask.NameToLayer(remoteLayerName);
-    }
+    void AssignRemoteLayer ()
+	{
+		gameObject.layer = LayerMask.NameToLayer(remoteLayerName);
+	}
 
-    void DisableComponents()
-    {
-        for (int i = 0; i < componentsToDisable.Length; i++)
-        {
-            componentsToDisable[i].enabled = false;
-        }
-    }
+	void DisableComponents ()
+	{
+		for (int i = 0; i < componentsToDisable.Length; i++)
+		{
+			componentsToDisable[i].enabled = false;
+		}
+	}
 
 	// When we are destroyed
 	void OnDisable ()
@@ -69,4 +73,5 @@ public class PlayerSetup : NetworkBehaviour {
 
         GameManager.UnRegisterPlayer(transform.name);
 	}
+
 }
