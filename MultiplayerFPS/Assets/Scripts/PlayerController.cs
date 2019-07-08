@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(ConfigurableJoint))]
 [RequireComponent(typeof(PlayerMotor))]
+[RequireComponent(typeof(Player))]
 public class PlayerController : MonoBehaviour {
 
 	[SerializeField]
@@ -20,58 +21,48 @@ public class PlayerController : MonoBehaviour {
 	private float jointSpring = 20f;
 	[SerializeField]
 	private float jointMaxForce = 40f;
-
-	// Component caching
+   
 	private PlayerMotor motor;
 	private ConfigurableJoint joint;
 	private Animator animator;
+	private Player player;
 
 	void Start ()
 	{
 		motor = GetComponent<PlayerMotor>();
 		joint = GetComponent<ConfigurableJoint>();
 		animator = GetComponent<Animator>();
+		player = GetComponent<Player>();
 
 		SetJointSettings(jointSpring);
 	}
 
 	void Update ()
-	{
-		//Calculate movement velocity as a 3D vector
-		float _xMov = Input.GetAxis("Horizontal");
-		float _zMov = Input.GetAxis("Vertical");
+    {
+        float _xMov = 0;
+        float _zMov = 0;
+        float _yRot = 0;
+        float _xRot = 0;
+        if (!player.paused)
+        {
+            _xMov = Input.GetAxis("Horizontal");
+            _zMov = Input.GetAxis("Vertical");
+            _yRot = Input.GetAxisRaw("Mouse X");
+            _xRot = Input.GetAxisRaw("Mouse Y");
+        }
 
-		Vector3 _movHorizontal = transform.right * _xMov;
+        Vector3 _movHorizontal = transform.right * _xMov;
 		Vector3 _movVertical = transform.forward * _zMov;
-
-		// Final movement vector
 		Vector3 _velocity = (_movHorizontal + _movVertical) * speed;
+        Vector3 _rotation = new Vector3(0f, _yRot, 0f) * lookSensitivity;
+        Vector3 _thrusterForce = Vector3.zero;
+        float _cameraRotationX = _xRot * lookSensitivity;
 
-		// Animate movement
-		animator.SetFloat("ForwardVelocity", _zMov);
-
-		//Apply movement
-		motor.Move(_velocity);
-
-		//Calculate rotation as a 3D vector (turning around)
-		float _yRot = Input.GetAxisRaw("Mouse X");
-
-		Vector3 _rotation = new Vector3(0f, _yRot, 0f) * lookSensitivity;
-
-		//Apply rotation
-		motor.Rotate(_rotation);
-
-		//Calculate camera rotation as a 3D vector (turning around)
-		float _xRot = Input.GetAxisRaw("Mouse Y");
-
-		float _cameraRotationX = _xRot * lookSensitivity;
-
-		//Apply camera rotation
+        animator.SetFloat("ForwardVelocity", _zMov);
+		motor.Move(_velocity);motor.Rotate(_rotation);
 		motor.RotateCamera(_cameraRotationX);
 
-		// Calculate the thrusterforce based on player input
-		Vector3 _thrusterForce = Vector3.zero;
-		if (Input.GetButton ("Jump"))
+		if (Input.GetButton ("Jump") && !player.paused)
 		{
 			_thrusterForce = Vector3.up * thrusterForce;
 			SetJointSettings(0f);
@@ -79,8 +70,6 @@ public class PlayerController : MonoBehaviour {
 		{
 			SetJointSettings(jointSpring);
 		}
-
-		// Apply the thruster force
 		motor.ApplyThruster(_thrusterForce);
 
 	}

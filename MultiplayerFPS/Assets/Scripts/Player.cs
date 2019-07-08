@@ -17,8 +17,10 @@ public class Player : NetworkBehaviour {
 
     [SyncVar]
     private int currentHealth;
+    [SyncVar]
+    public bool paused;
 
-	[SerializeField]
+    [SerializeField]
 	private Behaviour[] disableOnDeath;
 	private bool[] wasEnabled;
 
@@ -33,18 +35,25 @@ public class Player : NetworkBehaviour {
         SetDefaults();
     }
 
-	//void Update ()
-	//{
-	//	if (!isLocalPlayer)
-	//		return;
+    void Update ()
+    {
+    	if (!isLocalPlayer)
+    		return;
 
-	//	if (Input.GetKeyDown(KeyCode.K))
-	//	{
-	//		RpcTakeDamage(99999);
-	//	}
-	//}
+    	if (Input.GetKeyDown(KeyCode.K))
+    	{
+    		RpcTakeDamage(99999);
+    	}
+        else if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(!paused)
+                setPaused(true);
+            else
+                setPaused(false);
+        }
+    }
 
-	[ClientRpc]
+    [ClientRpc]
     public void RpcTakeDamage (int _amount)
     {
 		if (isDead)
@@ -104,6 +113,17 @@ public class Player : NetworkBehaviour {
 		Collider _col = GetComponent<Collider>();
 		if (_col != null)
 			_col.enabled = true;
+
+        setPaused(false);
     }
 
+    void setPaused(bool _paused)
+    {
+        if (!_paused)
+            Cursor.lockState = CursorLockMode.Locked;
+        else
+            Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = _paused;
+        paused = _paused;
+    }
 }
