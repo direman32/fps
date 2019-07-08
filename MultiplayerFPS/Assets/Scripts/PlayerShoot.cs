@@ -10,7 +10,7 @@ public class PlayerShoot : NetworkBehaviour {
     private GameObject Bullet;
     private GameObject Bullet_Emitter;
     private float Bullet_speed;
-    private List<GameObject> bullets = new List<GameObject>();
+    private float range;
 
     [SerializeField]
 	private Camera cam;
@@ -23,6 +23,7 @@ public class PlayerShoot : NetworkBehaviour {
         Bullet = weapon.prefab;
         Bullet_Emitter = weapon.prefab_emitter;
         Bullet_speed = weapon.speed;
+        range = 100f;
 
 		if (cam == null)
 		{
@@ -37,14 +38,14 @@ public class PlayerShoot : NetworkBehaviour {
 		{
 			Shoot();
 		}
-	}
+    }
 
 	[Client]
 	void Shoot ()
 	{
         GameObject tempBullet;
-        tempBullet = Instantiate(Bullet, Bullet_Emitter.transform.position, Bullet_Emitter.transform.rotation) as GameObject;
-        bullets.Add(tempBullet);
+        tempBullet = NetworkIdentity.Instantiate(Bullet, Bullet_Emitter.transform.position, Bullet_Emitter.transform.rotation) as GameObject;
+        tempBullet.GetComponent<Bullet>().setPlayerWhoShot(gameObject, weapon.damage, weapon.timer);
 
         Rigidbody tempBody;
         tempBody = tempBullet.GetComponent<Rigidbody>();
@@ -53,16 +54,13 @@ public class PlayerShoot : NetworkBehaviour {
        
 
 		RaycastHit _hit;
-		if (Physics.Raycast(cam.transform.position, cam.transform.forward, out _hit, weapon.range, mask) )
+		if (Physics.Raycast(cam.transform.position, cam.transform.forward, out _hit, range, mask) )
 		{
 			if (_hit.collider.tag == PLAYER_TAG)
 			{
                 //Red Glow
-                hitPlayer(_hit.collider.name, 10);
-
             }
 		}
-
 	}
 
     [Client]

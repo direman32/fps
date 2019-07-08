@@ -60,7 +60,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Bullet.cs" />
+    <Compile Include="Assets\Guns\Bullet.cs" />
+    <Compile Include="Assets\Guns\rocket.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\MatchSettings.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
