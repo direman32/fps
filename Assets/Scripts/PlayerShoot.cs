@@ -43,9 +43,8 @@ public class PlayerShoot : NetworkBehaviour {
 	[Client]
 	void Shoot ()
 	{
-        GameObject tempBullet;
-        tempBullet = NetworkIdentity.Instantiate(Bullet, Bullet_Emitter.transform.position, Bullet_Emitter.transform.rotation) as GameObject;
-        tempBullet.GetComponent<Bullet>().setPlayerWhoShot(gameObject, weapon.damage, weapon.timer);
+        GameObject tempBullet = NetworkIdentity.Instantiate(Bullet, Bullet_Emitter.transform.position, Bullet_Emitter.transform.rotation) as GameObject;
+        tempBullet.GetComponent<Rocket>().setPlayerWhoShot(gameObject, weapon.damage, weapon.timer);
 
         Rigidbody tempBody;
         tempBody = tempBullet.GetComponent<Rigidbody>();
@@ -71,9 +70,7 @@ public class PlayerShoot : NetworkBehaviour {
 
     [Command]
     void CmdPlayerShot(string _playerID, int _damage)
-    {
-        Debug.Log(_playerID + " has been shot.");
-        
+    {   
         Player _player = GameManager.GetPlayer(_playerID);
         _player.RpcTakeDamage(_damage);
     }

@@ -34,7 +34,6 @@ public class Bullet : NetworkBehaviour
    
     void CmdPlayerShot(string _playerID, int _damage)
     {
-        print(playerWeaponDamage + " " + playerWeaponTimer);
         player.GetComponent<PlayerShoot>().hitPlayer(_playerID, _damage);
     }
 }

@@ -9818,7 +9818,7 @@ MonoBehaviour:
     name: Glock
     damage: 30
     timer: 3
-    prefab: {fileID: 4684387552538325016, guid: e45d35e0edfb1cf4d9aaa2cfe0115c5c,
+    prefab: {fileID: 2107387498353436946, guid: c212d35041f60fc4dbbfb2fb765e3e0e,
       type: 3}
     prefab_emitter: {fileID: 6555915206096319774}
     speed: 3000
