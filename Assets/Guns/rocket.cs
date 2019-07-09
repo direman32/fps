@@ -52,25 +52,34 @@ public class Rocket : NetworkBehaviour
 
     private void explosion(GameObject caller)
     {
-        foreach (GameObject go in inExplody) {
-            if (!go.name.Equals(gameObject.name) && !go.name.Equals(capsule.name))
+        foreach (GameObject sploded in inExplody) {
+            if (!sploded.name.Equals(gameObject.name) && !sploded.name.Equals(capsule.name))
             {
-                if(go.tag == PLAYER_TAG)
-                    doDamage(go.name, 100);
-                var heading = go.transform.position - gameObject.transform.position;
-                var distance = heading.magnitude;
-                var direction = heading / distance;
-                go.GetComponent<Rigidbody>().AddForce(heading * 500);
-                //go.GetComponent<Rigidbody>().AddExplosionForce(200 * 2, go.transform.position, 20);
+                if(sploded.tag == PLAYER_TAG)
+                    doDamage(sploded.name, 100);
+
+                explosionForces(sploded);
             }
-            else if (go != gameObject)
+            else if (sploded != gameObject)
             {
-                Rocket r = go.GetComponent<Rocket>();
-                if(r != null && !go.Equals(caller))
+                Rocket r = sploded.GetComponent<Rocket>();
+                if(r != null && !sploded.Equals(caller))
                     r.explosion(gameObject);
             }
         }
         Destroy(gameObject);
+    }
+
+    private void explosionForces(GameObject _sploded)
+    {
+        Vector3 pos = gameObject.transform.position;
+        var heading = _sploded.transform.position - pos;
+        var distance = heading.magnitude;
+        var direction = heading / distance;
+        _sploded.GetComponent<Rigidbody>().AddForce(heading * 500);
+
+        //_sploded.GetComponent<Rigidbody>()
+         //           .AddExplosionForce(200 * 2,_sploded.transform.position,20);
     }
 
     public void setPlayerWhoShot(GameObject _player, int damage, float timer)
