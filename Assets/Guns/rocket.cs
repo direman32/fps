@@ -12,6 +12,7 @@ public class Rocket : NetworkBehaviour
     public float playerWeaponTimer;
     private const string PLAYER_TAG = "Player";
     List<GameObject> inExplody = new List<GameObject>();
+
     void Start()
     {
         Destroy(gameObject, 5f);
@@ -26,6 +27,8 @@ public class Rocket : NetworkBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        GameObject tempExp = NetworkIdentity.Instantiate(particle, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+        Destroy(tempExp, 1f);
         if (collision.collider.tag == PLAYER_TAG)
         {
             print("BOOM");
@@ -49,13 +52,16 @@ public class Rocket : NetworkBehaviour
 
     private void explosion(GameObject caller)
     {
-        GameObject tempExp = NetworkIdentity.Instantiate(particle, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-        Destroy(tempExp,1f);
         foreach (GameObject go in inExplody) {
             if (!go.name.Equals(gameObject.name) && !go.name.Equals(capsule.name))
             {
                 if(go.tag == PLAYER_TAG)
                     doDamage(go.name, 100);
+                var heading = go.transform.position - gameObject.transform.position;
+                var distance = heading.magnitude;
+                var direction = heading / distance;
+                go.GetComponent<Rigidbody>().AddForce(heading * 500);
+                //go.GetComponent<Rigidbody>().AddExplosionForce(200 * 2, go.transform.position, 20);
             }
             else if (go != gameObject)
             {
