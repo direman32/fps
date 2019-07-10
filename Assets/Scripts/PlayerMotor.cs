@@ -38,8 +38,8 @@ public class PlayerMotor : MonoBehaviour {
 	}
 	
 	public void ApplyThruster (Vector3 _thrusterForce)
-	{
-		thrusterForce = _thrusterForce;
+    {
+        thrusterForce = _thrusterForce;
 	}
     
 	void FixedUpdate ()

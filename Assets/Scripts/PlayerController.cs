@@ -26,6 +26,10 @@ public class PlayerController : MonoBehaviour {
 	private ConfigurableJoint joint;
 	private Animator animator;
 	private Player player;
+    //TODO put into jetpack class
+    private float feul;
+    private float timeUntilFeul;
+    private bool flying;
 
 	void Start ()
 	{
@@ -33,6 +37,9 @@ public class PlayerController : MonoBehaviour {
 		joint = GetComponent<ConfigurableJoint>();
 		animator = GetComponent<Animator>();
 		player = GetComponent<Player>();
+        feul = 1f;
+        timeUntilFeul = 0f;
+        flying = true;
 
 		SetJointSettings(jointSpring);
 	}
@@ -62,19 +69,27 @@ public class PlayerController : MonoBehaviour {
 		motor.Move(_velocity);motor.Rotate(_rotation);
 		motor.RotateCamera(_cameraRotationX);
 
-		if (Input.GetButton ("Jump") && !player.paused)
+		if (Input.GetButton ("Jump") && !player.paused && feul > 0)
 		{
+            if(!flying)
+                feul -= Time.deltaTime;
 			_thrusterForce = Vector3.up * thrusterForce;
 			SetJointSettings(0f);
-		} else
-		{
-			SetJointSettings(jointSpring);
-		}
+            timeUntilFeul = 3f;
+        }
+        else
+        {
+            SetJointSettings(jointSpring);
+        }
 		motor.ApplyThruster(_thrusterForce);
 
+        if (timeUntilFeul >= 0)
+            timeUntilFeul -= Time.deltaTime;
+        else
+            feul = 1f;
 	}
 
-	private void SetJointSettings (float _jointSpring)
+    private void SetJointSettings (float _jointSpring)
 	{
 		joint.yDrive = new JointDrive {
 			mode = jointMode,

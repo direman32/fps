@@ -9609,7 +9609,7 @@ MonoBehaviour:
   speed: 5
   lookSensitivity: 3
   thrusterForce: 1300
-  jointMode: 1
+  jointMode: 0
   jointSpring: 20
   jointMaxForce: 40
 --- !u!114 &11420026
@@ -9838,11 +9838,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cba6b6c515fdc6c49b8d58ab912e83b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
   paused: 0
   disableOnDeath:
   - {fileID: 11433214}
   - {fileID: 11433114}
+  maxHealth: 100
+  spawn: {fileID: 4023643725505217800, guid: 98247f583cc7202459b03b899b456067, type: 3}
 --- !u!95 &9504178
 Animator:
   serializedVersion: 3
@@ -19815,11 +19816,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 465354}
     m_Modifications:
-    - target: {fileID: 3074162758825504838, guid: eb1c5c15f7768fe40aa9d7ce4ad21c1a,
-        type: 3}
-      propertyPath: m_Name
-      value: RocketLauncher
-      objectReference: {fileID: 0}
     - target: {fileID: 7407307083246208892, guid: eb1c5c15f7768fe40aa9d7ce4ad21c1a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19874,6 +19870,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074162758825504838, guid: eb1c5c15f7768fe40aa9d7ce4ad21c1a,
+        type: 3}
+      propertyPath: m_Name
+      value: RocketLauncher
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb1c5c15f7768fe40aa9d7ce4ad21c1a, type: 3}

@@ -23,6 +23,8 @@ public class Player : NetworkBehaviour {
     [SerializeField]
 	private Behaviour[] disableOnDeath;
 	private bool[] wasEnabled;
+    private bool spawned = false;
+    private float timer = 0f;
 
     public void Setup ()
     {
@@ -51,6 +53,14 @@ public class Player : NetworkBehaviour {
             else
                 setPaused(false);
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name.Equals("Death"))
+            Die();
+        if (collision.gameObject.name.Equals("Spawn"))
+            Die();
     }
 
     [ClientRpc]
@@ -82,22 +92,26 @@ public class Player : NetworkBehaviour {
 		if (_col != null)
 			_col.enabled = false;
 
-		Debug.Log(transform.name + " is DEAD!");
-
 		StartCoroutine(Respawn());
 	}
 
-	private IEnumerator Respawn ()
+    private IEnumerator Respawn ()
 	{
-		yield return new WaitForSeconds(GameManager.instance.matchSettings.respawnTime);
+        yield return new WaitForSeconds(timer);
+        timer = GameManager.instance.matchSettings.respawnTime;
 
-		SetDefaults();
-		Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();
-		transform.position = _spawnPoint.position;
+        Transform _spawnPoint;
+
+        SetDefaults();
+        do
+        {
+            _spawnPoint = NetworkManager.singleton.GetStartPosition();
+            print(_spawnPoint.gameObject.name);
+        } while (_spawnPoint.gameObject.name.Equals("SpawnPoint"));
+
+        transform.position = _spawnPoint.position;
 		transform.rotation = _spawnPoint.rotation;
-
-		Debug.Log(transform.name + " respawned.");
-	}
+    }
 
     public void SetDefaults ()
     {
