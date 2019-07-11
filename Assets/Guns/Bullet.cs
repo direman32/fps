@@ -14,7 +14,7 @@ public class Bullet : NetworkBehaviour
     {
         Destroy(gameObject, playerWeaponTimer);
     }
-
+    
     [Client]
     private void OnCollisionEnter(Collision collision)
     {

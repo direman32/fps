@@ -4,6 +4,9 @@ using System.Collections;
 
 public class Player : NetworkBehaviour {
 
+    private static string Death = "Death";
+    private static string Spawn = "Spawn";
+
 	[SyncVar]
 	private bool _isDead = false;
 	public bool isDead
@@ -25,6 +28,7 @@ public class Player : NetworkBehaviour {
 	private bool[] wasEnabled;
     private bool spawned = false;
     private float timer = 0f;
+    private string originalSpawn = "";
 
     public void Setup ()
     {
@@ -57,9 +61,9 @@ public class Player : NetworkBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name.Equals("Death"))
+        if (collision.gameObject.name.Equals(Death))
             Die();
-        if (collision.gameObject.name.Equals("Spawn"))
+        if (collision.gameObject.name.Equals(Spawn))
             Die();
     }
 
@@ -70,9 +74,7 @@ public class Player : NetworkBehaviour {
 			return;
 
         currentHealth -= _amount;
-
-        Debug.Log(transform.name + " now has " + currentHealth + " health.");
-
+        
 		if (currentHealth <= 0)
 		{
 			Die();
@@ -98,19 +100,26 @@ public class Player : NetworkBehaviour {
     private IEnumerator Respawn ()
 	{
         yield return new WaitForSeconds(timer);
-        timer = GameManager.instance.matchSettings.respawnTime;
 
         Transform _spawnPoint;
 
         SetDefaults();
-        do
+        if (timer == 0)
         {
             _spawnPoint = NetworkManager.singleton.GetStartPosition();
-            print(_spawnPoint.gameObject.name);
-        } while (_spawnPoint.gameObject.name.Equals("SpawnPoint"));
-
+            originalSpawn = _spawnPoint.gameObject.name;
+        }
+        else
+        {
+            do
+            {
+                _spawnPoint = NetworkManager.singleton.GetStartPosition();
+            } while (_spawnPoint.gameObject.name.Equals(originalSpawn));
+        }
         transform.position = _spawnPoint.position;
-		transform.rotation = _spawnPoint.rotation;
+        transform.rotation = _spawnPoint.rotation;
+
+        timer = GameManager.instance.matchSettings.respawnTime;
     }
 
     public void SetDefaults ()

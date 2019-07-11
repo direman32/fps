@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour {
     //TODO put into jetpack class
     private float feul;
     private float timeUntilFeul;
+    [SerializeField]
     private bool flying;
 
 	void Start ()
@@ -39,7 +40,6 @@ public class PlayerController : MonoBehaviour {
 		player = GetComponent<Player>();
         feul = 1f;
         timeUntilFeul = 0f;
-        flying = true;
 
 		SetJointSettings(jointSpring);
 	}

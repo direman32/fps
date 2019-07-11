@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Rocket : NetworkBehaviour
+public class Splode : NetworkBehaviour
 {
     public GameObject player;
     public GameObject particle;
@@ -12,17 +12,17 @@ public class Rocket : NetworkBehaviour
     public float playerWeaponTimer;
     private const string PLAYER_TAG = "Player";
     List<GameObject> inExplody = new List<GameObject>();
+    // private bool barrel;
 
     void Start()
     {
-            Destroy(gameObject, 5f);
-            capsule = gameObject.transform.GetChild(0).gameObject;
+        capsule = gameObject.transform.GetChild(0).gameObject;
     }
 
     [Client]
-    private void doDamage(string playerID, int damage)
+    private void doDamage(GameObject player, int damage)
     {
-        CmdPlayerShot(playerID, damage);
+        CmdPlayerShot(player, damage);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -35,38 +35,65 @@ public class Rocket : NetworkBehaviour
         }
         explosion(gameObject);
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Rigidbody>() != null && 
-            !other.gameObject.Equals(gameObject))
+        if (other.gameObject.GetComponent<Rigidbody>() != null)
         {
-                inExplody.Add(other.gameObject);
+            inExplody.Add(other.gameObject);
         }
     }
     private void OnTriggerExit(Collider other)
     {
         inExplody.Remove(other.gameObject);
     }
-
+    
     private void explosion(GameObject caller)
     {
-        foreach (GameObject sploded in inExplody) {
-            if (!sploded.name.Equals(gameObject.name) && !sploded.name.Equals(capsule.name))
+        foreach (GameObject sploded in inExplody)
+        {
+            if (nameChecks(sploded.name))
             {
-                if(sploded.tag == PLAYER_TAG)
-                    doDamage(sploded.name, 100);
+                if (sploded.tag == PLAYER_TAG)
+                {
+                    doDamage(sploded, 100);
+                }
 
                 explosionForces(sploded);
             }
-            else if (sploded != gameObject)
+            else if (!isThis(sploded))
             {
-                Rocket r = sploded.GetComponent<Rocket>();
-                if(r != null && !sploded.Equals(caller))
-                    r.explosion(gameObject);
+                Splode splode = sploded.GetComponent<Splode>();
+                if (splode != null && !sploded.Equals(caller))
+                    splode.explosion(gameObject);
             }
         }
         Destroy(gameObject);
+    }
+
+    private bool nameChecks(string Name)
+    {
+        if (Name == null || Name.Equals(name))
+        {
+            return true;
+        }
+        foreach(Transform child in GetComponentsInChildren<Transform>())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool isThis(GameObject obj)
+    {
+        if (obj.Equals(gameObject))
+            return true;
+        foreach (Transform child in GetComponentsInChildren<Transform>())
+        {
+            if (child.Equals(obj))
+                return true;
+        }
+        return false;
     }
 
     private void explosionForces(GameObject _sploded)
@@ -78,15 +105,8 @@ public class Rocket : NetworkBehaviour
         _sploded.GetComponent<Rigidbody>().AddForce(heading * 500);
     }
 
-    public void setPlayerWhoShot(GameObject _player, int damage, float timer)
+    void CmdPlayerShot(GameObject player, int _damage)
     {
-        player = _player;
-        playerWeaponDamage = damage;
-        playerWeaponTimer = timer;
-    }
-
-    void CmdPlayerShot(string _playerID, int _damage)
-    {
-        player.GetComponent<PlayerShoot>().hitPlayer(_playerID, _damage);
+        player.GetComponent<PlayerShoot>().hitPlayer(player.name, _damage);
     }
 }
