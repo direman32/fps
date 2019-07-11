@@ -7,12 +7,12 @@ public class Splode : NetworkBehaviour
 {
     public GameObject player;
     public GameObject particle;
+    public GameObject barrelParts;
     GameObject capsule;
     public int playerWeaponDamage;
     public float playerWeaponTimer;
-    private const string PLAYER_TAG = "Player";
+    private static readonly string PLAYER_TAG = "Player";
     List<GameObject> inExplody = new List<GameObject>();
-    // private bool barrel;
 
     void Start()
     {
@@ -27,13 +27,11 @@ public class Splode : NetworkBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        GameObject tempExp = NetworkIdentity.Instantiate(particle, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-        Destroy(tempExp, 1f);
-        if (collision.collider.tag == PLAYER_TAG)
-        {
-            print("BOOM");
+        if (collision.gameObject.name.Contains("Bullet") || collision.gameObject.name.Contains("Rocket")) {
+            GameObject tempExp = NetworkIdentity.Instantiate(particle, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+            Destroy(tempExp, 1f);
+            explosion(gameObject);
         }
-        explosion(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -48,26 +46,28 @@ public class Splode : NetworkBehaviour
         inExplody.Remove(other.gameObject);
     }
     
-    private void explosion(GameObject caller)
+    public void explosion(GameObject caller)
     {
         foreach (GameObject sploded in inExplody)
         {
-            if (nameChecks(sploded.name))
-            {
-                if (sploded.tag == PLAYER_TAG)
+            if(sploded!= null) {
+                if (nameChecks(sploded.name))
                 {
-                    doDamage(sploded, 100);
+                    if (sploded.tag == PLAYER_TAG)
+                    {
+                        doDamage(sploded, Mathf.RoundToInt(100 /explosionForces(sploded)));
+                    }
                 }
-
-                explosionForces(sploded);
-            }
-            else if (!isThis(sploded))
-            {
-                Splode splode = sploded.GetComponent<Splode>();
-                if (splode != null && !sploded.Equals(caller))
-                    splode.explosion(gameObject);
+                else if (!isThis(sploded))
+                {
+                    Splode splode = sploded.GetComponent<Splode>();
+                    if (splode != null && !sploded.Equals(caller))
+                        splode.explosion(gameObject);
+                }
             }
         }
+        GameObject tempBarrelParts = NetworkIdentity.Instantiate(barrelParts, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+        Destroy(tempBarrelParts, 2f);
         Destroy(gameObject);
     }
 
@@ -96,13 +96,14 @@ public class Splode : NetworkBehaviour
         return false;
     }
 
-    private void explosionForces(GameObject _sploded)
+    private float explosionForces(GameObject _sploded)
     {
         Vector3 pos = gameObject.transform.position;
         var heading = _sploded.transform.position - pos;
         var distance = heading.magnitude;
         var direction = heading / distance;
-        _sploded.GetComponent<Rigidbody>().AddForce(heading * 500);
+        _sploded.GetComponent<Rigidbody>().AddForce(direction * 500);
+        return distance - .75f;
     }
 
     void CmdPlayerShot(GameObject player, int _damage)

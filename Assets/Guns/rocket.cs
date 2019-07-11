@@ -41,7 +41,7 @@ public class Rocket : NetworkBehaviour
         if (other.gameObject.GetComponent<Rigidbody>() != null && 
             !other.gameObject.Equals(gameObject))
         {
-                inExplody.Add(other.gameObject);
+            inExplody.Add(other.gameObject);
         }
     }
     private void OnTriggerExit(Collider other)
@@ -56,6 +56,12 @@ public class Rocket : NetworkBehaviour
             {
                 if(sploded.tag == PLAYER_TAG)
                     doDamage(sploded.name, 100);
+                //else if(sploded.name.Contains("Barrel"))
+                //{
+                  //  Splode barrel = sploded.GetComponent<Splode>();
+                    //if (barrel != null && !sploded.Equals(caller))
+                      //  barrel.explosion(gameObject);
+                //}
 
                 explosionForces(sploded);
             }
@@ -75,7 +81,7 @@ public class Rocket : NetworkBehaviour
         var heading = _sploded.transform.position - pos;
         var distance = heading.magnitude;
         var direction = heading / distance;
-        _sploded.GetComponent<Rigidbody>().AddForce(heading * 500);
+        _sploded.GetComponent<Rigidbody>().AddForce(direction * 500);
     }
 
     public void setPlayerWhoShot(GameObject _player, int damage, float timer)

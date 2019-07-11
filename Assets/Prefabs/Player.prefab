@@ -9796,10 +9796,10 @@ MonoBehaviour:
     name: Glock
     damage: 30
     timer: 3
-    prefab: {fileID: 4684387552538325016, guid: e45d35e0edfb1cf4d9aaa2cfe0115c5c,
+    prefab: {fileID: 2107387498353436946, guid: c212d35041f60fc4dbbfb2fb765e3e0e,
       type: 3}
-    prefab_emitter: {fileID: 7869234602288822613}
-    speed: 600
+    prefab_emitter: {fileID: 6555915206096319774}
+    speed: 400
   cam: {fileID: 2047062}
   mask:
     serializedVersion: 2
@@ -19528,7 +19528,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &443646
 Transform:
   m_ObjectHideFlags: 0
@@ -19947,7 +19947,7 @@ PrefabInstance:
     - target: {fileID: 3074162758825504838, guid: eb1c5c15f7768fe40aa9d7ce4ad21c1a,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7407307083246208892, guid: eb1c5c15f7768fe40aa9d7ce4ad21c1a,
         type: 3}
@@ -20006,6 +20006,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb1c5c15f7768fe40aa9d7ce4ad21c1a, type: 3}
+--- !u!1 &6555915206096319774 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2772326495296093792, guid: eb1c5c15f7768fe40aa9d7ce4ad21c1a,
+    type: 3}
+  m_PrefabInstance: {fileID: 8971736051185159038}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1895462305329908738 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7407307083246208892, guid: eb1c5c15f7768fe40aa9d7ce4ad21c1a,

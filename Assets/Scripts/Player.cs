@@ -106,7 +106,9 @@ public class Player : NetworkBehaviour {
         SetDefaults();
         if (timer == 0)
         {
-            _spawnPoint = NetworkManager.singleton.GetStartPosition();
+            // use network manager to fix initial spawn bug
+            // unregister spawn and then go through randomly
+               _spawnPoint = NetworkManager.singleton.GetStartPosition();
             originalSpawn = _spawnPoint.gameObject.name;
         }
         else
