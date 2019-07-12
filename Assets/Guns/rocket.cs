@@ -39,7 +39,7 @@ public class Rocket : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<Rigidbody>() != null && 
-            !other.gameObject.Equals(gameObject))
+            !other.gameObject.Equals(gameObject) && !inExplody.Contains(other.gameObject))
         {
             inExplody.Add(other.gameObject);
         }
@@ -52,16 +52,16 @@ public class Rocket : NetworkBehaviour
     private void explosion(GameObject caller)
     {
         foreach (GameObject sploded in inExplody) {
-            if (!sploded.name.Equals(gameObject.name) && !sploded.name.Equals(capsule.name))
+            if (sploded != null && !sploded.name.Equals(gameObject.name) && !sploded.name.Equals(capsule.name))
             {
                 if(sploded.tag == PLAYER_TAG)
                     doDamage(sploded.name, 100);
-                //else if(sploded.name.Contains("Barrel"))
-                //{
-                  //  Splode barrel = sploded.GetComponent<Splode>();
-                    //if (barrel != null && !sploded.Equals(caller))
-                      //  barrel.explosion(gameObject);
-                //}
+                else if(sploded.name.Contains("Barrel"))
+                {
+                    Splode barrel = sploded.GetComponent<Splode>();
+                    if (barrel != null && !sploded.Equals(caller))
+                       barrel.explosion(gameObject);
+                }
 
                 explosionForces(sploded);
             }

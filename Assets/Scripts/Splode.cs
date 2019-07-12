@@ -27,7 +27,7 @@ public class Splode : NetworkBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name.Contains("Bullet") || collision.gameObject.name.Contains("Rocket")) {
+        if (collision.gameObject.name.Contains("Bullet")) {
             GameObject tempExp = NetworkIdentity.Instantiate(particle, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
             Destroy(tempExp, 1f);
             explosion(gameObject);
