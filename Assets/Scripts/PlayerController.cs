@@ -44,6 +44,11 @@ public class PlayerController : MonoBehaviour {
 		SetJointSettings(jointSpring);
 	}
 
+    public float getFeul()
+    {
+        return feul;
+    }
+
 	void Update ()
     {
         float _xMov = 0;

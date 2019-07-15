@@ -53,11 +53,10 @@ public class PlayerShoot : NetworkBehaviour {
         }
 
         GameObject tempBullet = NetworkIdentity.Instantiate(Bullet, Bullet_Emitter.transform.position, Bullet_Emitter.transform.rotation) as GameObject;
-        tempBullet.GetComponent<Rocket>().setPlayerWhoShot(gameObject, weapon.damage, weapon.timer);
+        tempBullet.GetComponent<Bullet>().setPlayerWhoShot(gameObject, weapon.damage, weapon.timer);
 
         Rigidbody tempBody;
         tempBody = tempBullet.GetComponent<Rigidbody>();
-        //tempBody.AddForce(Bullet_Emitter.transform.forward * Bullet_speed);
         tempBody.AddForce(Bullet_Emitter.transform.forward * Bullet_speed);
 	}
 

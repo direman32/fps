@@ -20,6 +20,7 @@ public class Player : NetworkBehaviour {
 
     [SyncVar]
     private int currentHealth;
+
     [SyncVar]
     public bool paused;
 
@@ -96,6 +97,11 @@ public class Player : NetworkBehaviour {
 
 		StartCoroutine(Respawn());
 	}
+
+    public int getHealth()
+    {
+        return currentHealth;
+    }
 
     private IEnumerator Respawn ()
 	{
