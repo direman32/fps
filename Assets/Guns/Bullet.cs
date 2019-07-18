@@ -18,6 +18,7 @@ public class Bullet : NetworkBehaviour
     [Client]
     private void OnCollisionEnter(Collision collision)
     {
+        gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         if (collision.collider.tag == PLAYER_TAG)
         {
             CmdPlayerShot(collision.collider.name, playerWeaponDamage);

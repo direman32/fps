@@ -7,7 +7,7 @@ public class HUDScript : MonoBehaviour
 {
     public GameObject health;
     public GameObject feul;
-    public Slider healthBar;
+    private Slider healthBar;
     private Slider feulBar;
     private GameObject player;
     private Player playerScript;
